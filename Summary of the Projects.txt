@@ -1,4 +1,4 @@
----------MY STM32 PROJECTS----------
+--------- STM32 PROJECTS ----------
 
 1- 
 --> I configured PA5 pin as "GPIO_Output". The point of this is giving info to STM32. Controlling the voltage on PA5. It can output either HIGH(3.3V) or LOW(0V).
