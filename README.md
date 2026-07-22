@@ -31,11 +31,6 @@ Each project is developed incrementally and focuses on understanding one embedde
 | 03 | Button Controlled LED | ✅ |
 | 04 | PWM LED Brightness | ✅ |
 | 05 | EXTI Interrupt | ✅ |
-| 06 | Servo Motor | 🚧 |
-| 07 | OLED (I2C) | 🚧 |
-| 08 | HC-SR04 | 🚧 |
-| 09 | DHT22 | 🚧 |
-| 10 | MPU6050 | 🚧 |
 
 ---
 
