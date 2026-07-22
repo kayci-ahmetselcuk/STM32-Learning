@@ -1,0 +1,41 @@
+---------MY STM32 PROJECTS----------
+
+1- 
+--> I configured PA5 pin as "GPIO_Output". The point of this is giving info to STM32. Controlling the voltage on PA5. It can output either HIGH(3.3V) or LOW(0V).
+--> CubeMX: When we selected PA5->GPIO_Output in the .ioc file, CubeMX automatically generated all the inilization code.
+--> HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5); This code block does; pin is high ? it becomes low : high. Since the led is connected to PA5, the led turns on and off repeatedly.
+--> HAL_Delay(500); This tells the microcontroller LED ON, wait 500ms, LED OFF, wait 500ms, repeat forever.
+--> Why does the program keep running? cause of while(1). 
+
+2-
+--> Connected an external led on a breadboard. (used 5mm led, 220 ohm r, two jumper)
+--> Pin name PA5 is an arduino code name. refer to stm32, its name is SCK/D13 pin
+--> When connecting the ground jumper, DONT FORGET TO CONNECT IN STM32'S GROUND PIN, not in breadboard ground. (picture is included in the same folder)
+
+3-
+-->Controlling a led on the card using button(external or b1 user button) (used button, two jumper)
+--> Used PC13 or PA0(for external button) as a GPIO input to read the button. Configured PA0 as GPIO input and selected pull-up for keeping pin to HIGH
+--> Read the button state using (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) and controlled the led using if-else statement
+--> Is PA0 low(0)? Because of we use the pull-up; when we push the button, PA0 is LOW(RESET) otherwise PA0 is HIGH(SET). if only runs when we push the button.
+
+if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)== GPIO_PIN_RESET){
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET); (turns the led off)
+}
+else{
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);}   (turns the led on)
+
+--> RESET means LOW(0), SET means HIGH(1)
+    Press the button : led turns off
+    Release the button : led turns on
+    
+4-
+--> Controlling the brightness of an led (used led, two jumper, 220 ohm resistor)
+--> Used Timer 2(TIM2) to generate PWM signal, connected to PA0.
+--> Set Channel 1 to PWM Generation CH1
+        Prescaler to 83
+        Counter 999
+--> HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1); starts pwm.
+--> __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1,i); set the duty cycle.
+--> Through the first for loop the brightness of led is increasing slowly, on second for loop decreasing slowly.
+--> HAL_Delay(1); wait 1 ms.
+--> we used the "uint16_t" parameter. Meaning of this is unsigned int, 16 bit, and t(type). It is totally suitable for PWM.
