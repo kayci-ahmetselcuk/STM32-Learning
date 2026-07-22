@@ -21,3 +21,15 @@ HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
   }
   /* USER CODE END 3 */
   }
+
+-------------------------------------------------------------------------------
+  
+  Project 5:
+  
+  void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+    if(GPIO_Pin == GPIO_PIN_13)
+    {
+        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+    }
+}
