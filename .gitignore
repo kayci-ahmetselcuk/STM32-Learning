@@ -14,3 +14,4 @@ Release/
 # STM32CubeIDE generated files
 *.su
 *.cyclo
+*.launch

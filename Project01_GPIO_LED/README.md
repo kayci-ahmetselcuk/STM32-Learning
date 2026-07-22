@@ -1,0 +1,5 @@
+-> I configured PA5 pin as "GPIO_Output". The point of this is giving info to STM32. Controlling the voltage on PA5. It can output either HIGH(3.3V) or LOW(0V).
+--> CubeMX: When we selected PA5->GPIO_Output in the .ioc file, CubeMX automatically generated all the inilization code.
+--> HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5); This code block does; pin is high ? it becomes low : high. Since the led is connected to PA5, the led turns on and off repeatedly.
+--> HAL_Delay(500); This tells the microcontroller LED ON, wait 500ms, LED OFF, wait 500ms, repeat forever.
+--> Why does the program keep running? cause of while(1). 
