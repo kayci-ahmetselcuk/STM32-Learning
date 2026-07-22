@@ -1,2 +1,11 @@
-# STM32-Learning
-A comprehensive STM32 learning repository documenting my embedded systems journey with the STM32 NUCLEO-F446RE.
+# STM32 Learning
+
+A collection of STM32 projects developed while learning embedded systems.
+
+## Projects
+
+- Project 01 - GPIO LED Blink
+- Project 02 - External LED
+- Project 03 - Button Control
+- Project 04 - PWM LED Brightness
+- Project 05 - EXTI Interrupt
