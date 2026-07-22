@@ -10,6 +10,10 @@ Release/
 *.elf
 *.bin
 *.hex
+*.jpg
+*.jpeg
+*.png
+*.mp4
 
 # STM32CubeIDE generated files
 *.su
