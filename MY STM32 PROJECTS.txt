@@ -39,3 +39,12 @@ else{
 --> Through the first for loop the brightness of led is increasing slowly, on second for loop decreasing slowly.
 --> HAL_Delay(1); wait 1 ms.
 --> we used the "uint16_t" parameter. Meaning of this is unsigned int, 16 bit, and t(type). It is totally suitable for PWM.
+
+
+5.
+--> We used the user button(PC13) to generate an external interrupt(EXTI) and toggle the onboard LD2 led(PA5). (No external wiring)
+--> Unlike previous projects, the CPU doesn't continuously check the button. Instead, the interrupt automatically notifies the processor when the button is pressed.
+--> We configured PA5 to GPIO_Output, PC13 to GPIO_EXTI13. Enableb NVIC(Nested Vector Interrupt Controller) setting.
+--> Previously we used while(1) loop.
+--> Now interrupt. This is how interrupt works: CPU waits > Button pressed > EXTI interrupt occurs > HAL automatically calls. HAL_GPIO_EXTI_Callback() > Execution returns to while(1)
+--> HAL_GPIO_EXTI_Callback() When interrupt exists, it works.
