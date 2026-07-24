@@ -31,6 +31,7 @@ Each project is developed incrementally and focuses on understanding one embedde
 | 03 | Button Controlled LED | ✅ |
 | 04 | PWM LED Brightness | ✅ |
 | 05 | EXTI Interrupt | ✅ |
+| 06 | PWM Servo Motor | ✅ |
 
 ---
 
