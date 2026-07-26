@@ -1,7 +1,7 @@
 --------- STM32 PROJECTS ----------
 
 1- 
---> I configured PA5 pin as "GPIO_Output". The point of this is giving info to STM32. Controlling the voltage on PA5. It can output either HIGH(3.3V) or LOW(0V).
+--> Configured PA5 pin as "GPIO_Output". The point of this is giving info to STM32. Controlling the voltage on PA5. It can output either HIGH(3.3V) or LOW(0V).
 --> CubeMX: When we selected PA5->GPIO_Output in the .ioc file, CubeMX automatically generated all the inilization code.
 --> HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5); This code block does; pin is high ? it becomes low : high. Since the led is connected to PA5, the led turns on and off repeatedly.
 --> HAL_Delay(500); This tells the microcontroller LED ON, wait 500ms, LED OFF, wait 500ms, repeat forever.
@@ -42,9 +42,37 @@ else{
 
 
 5.
---> We used the user button(PC13) to generate an external interrupt(EXTI) and toggle the onboard LD2 led(PA5). (No external wiring)
+--> Used the user button(PC13) to generate an external interrupt(EXTI) and toggle the onboard LD2 led(PA5). (No external wiring)
 --> Unlike previous projects, the CPU doesn't continuously check the button. Instead, the interrupt automatically notifies the processor when the button is pressed.
 --> We configured PA5 to GPIO_Output, PC13 to GPIO_EXTI13. Enableb NVIC(Nested Vector Interrupt Controller) setting.
 --> Previously we used while(1) loop.
 --> Now interrupt. This is how interrupt works: CPU waits > Button pressed > EXTI interrupt occurs > HAL automatically calls. HAL_GPIO_EXTI_Callback() > Execution returns to while(1)
 --> HAL_GPIO_EXTI_Callback() When interrupt exists, it works.
+
+
+6.
+--> Used TIM2 PWM output (PA0) to control the position of a servo motor by generating a 50 Hz PWM signal.
+--> Configured PA0 as TIM2 Channel 1 (Alternate Function - PWM Output) and enabled TIM2 PWM Generation CH1.
+--> Configured TIM2 with Prescaler = 83 and Period = 19999, which generates a 20 ms (50 Hz) PWM period required by standard servo motors.
+--> Started the PWM signal using HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1).
+--> Changed the servo angle by updating the CCR1 (Capture/Compare Register) value using "__HAL_TIM_SET_COMPARE();" which changes the PWM pulse width (approximately 1 ms to 2 ms).
+--> Unlike previous projects where LEDs were controlled by GPIO or interrupts, the hardware timer continuously generated the PWM signal, so the CPU only updated the duty cycle when a new servo position was needed.
+
+7.
+--> Used the afiskon/stm32-ssd1306 open-source library to control an SSD1306 OLED display over I2C.
+--> Configured I2C1 in CubeMX using pins PB8 (SCL) and PB9 (SDA), matching the hi2c1 handle expected by the library.
+--> Copied the library source files (ssd1306.c/.h, ssd1306_fonts.c/.h) into Src//Inc/, changing the target family from STM32F0 to STM32F4 to match our MCU.(also renamed the template file)
+--> Initialized the display using ssd1306_Init(), then cleared the screen with ssd1306_Fill(Black) and pushed the buffer to the display using ssd1306_UpdateScreen().
+--> Wrote text to the screen using ssd1306_SetCursor(x, y) followed by ssd1306_WriteString(text, font, color), and discovered that longer strings needed a smaller font (Font_7x10) and had to be split across multiple lines to fit the 128-pixel-wide display.
+--> Unlike the servo/PWM project where a hardware timer continuously generated the signal in the background, here the CPU actively writes to a display buffer in RAM, and nothing appears on the physical screen until ssd1306_UpdateScreen() is called to push that buffer over I2C — so every visual change requires an explicit software-triggered I2C transfer rather than a peripheral running independently.
+
+8.
+--> Configured SPI1 in CubeMX in Master mode to learn the basic SPI communication process.
+--> Cnfigured PA5 as SCK (Serial Clock), PA6 as MISO (Master In Slave Out), and PA7 as MOSI (Master Out Slave In).
+--> Configured a separate GPIO pin as the Chip Select (CS) signal and set it HIGH when the SPI device was inactive, then pulled it LOW before starting the transmission and HIGH again after the transmission was completed.
+--> Created a test data array containing four bytes (0x55, 0xAA, 0x12, 0x34) and transmitted it using HAL_SPI_Transmit() through the hspi1 SPI handle.
+--> Used HAL_StatusTypeDef to store the result of the SPI transmission and checked whether the function returned HAL_OK.
+--> Connected an external LED to PB0 (Arduino pin A3) and used it as a visual indication of a successful SPI transmission. When the transmission returned HAL_OK, the LED was turned on; otherwise, it was turned off.
+--> Added delays so that the LED stayed on for one second and off for one second, making the successful SPI transmission easier to observe.
+--> Since we did not have a dedicated SPI slave device available, we used the LED as a software-based test to verify that the STM32 successfully executed the SPI transmission function, rather than verifying the received data from an actual SPI peripheral.
+

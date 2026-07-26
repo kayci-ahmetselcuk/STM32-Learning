@@ -33,3 +33,90 @@ HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
         HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
     }
 }
+
+--------------------------------------------------------------------------------
+
+ Project 6:
+ 
+ HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);            user code 2
+ 
+ 
+while (1)
+  {
+    /* USER CODE END WHILE */
+__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 500);   
+HAL_Delay(1000);
+__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 1500);
+HAL_Delay(1000);
+__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 2500);
+HAL_Delay(1000);
+    /* USER CODE BEGIN 3 */
+  }
+
+--------------------------------------------------------------------------------
+
+ Project 7:
+ 
+ /* USER CODE BEGIN Includes */
+#include "ssd1306.h"
+#include "ssd1306_fonts.h"
+/* USER CODE END Includes */
+
+/* USER CODE BEGIN 2 */
+ssd1306_Init();
+ssd1306_Fill(Black);
+ssd1306_UpdateScreen();
+
+ssd1306_SetCursor(4,0);
+ssd1306_WriteString("Yeri agam yeri", Font_6x8, White);
+ssd1306_SetCursor(4,10);
+ssd1306_WriteString("gidek de patlican", Font_6x8, White);
+ssd1306_SetCursor(4,20);
+ssd1306_WriteString("kebabi yiyek", Font_6x8, White);
+ssd1306_UpdateScreen();
+/* USER CODE END 2 */
+
+/* ssd1306_conf.h — key configuration */
+#define STM32F4
+#define SSD1306_USE_I2C
+#define SSD1306_I2C_PORT        hi2c1
+#define SSD1306_I2C_ADDR        (0x3C << 1)
+
+#define SSD1306_INCLUDE_FONT_6x8
+#define SSD1306_INCLUDE_FONT_7x10
+#define SSD1306_INCLUDE_FONT_11x18
+#define SSD1306_INCLUDE_FONT_16x26
+#define SSD1306_INCLUDE_FONT_16x24
+#define SSD1306_INCLUDE_FONT_16x15
+
+--------------------------------------------------------------------------------
+
+Project 8:
+
+while (1)
+{
+    uint8_t spi_data[] = {0x55, 0xAA, 0x12, 0x34};
+
+    HAL_GPIO_WritePin(SPI_CS_GPIO_Port, SPI_CS_Pin, GPIO_PIN_RESET);
+
+    HAL_StatusTypeDef status =
+        HAL_SPI_Transmit(&hspi1, spi_data, 4, 100);
+
+    HAL_GPIO_WritePin(SPI_CS_GPIO_Port, SPI_CS_Pin, GPIO_PIN_SET);
+
+    if (status == HAL_OK)
+    {
+        HAL_GPIO_WritePin(SPI_TEST_LED_GPIO_Port,
+                          SPI_TEST_LED_Pin,
+                          GPIO_PIN_SET);
+
+        HAL_Delay(1000);
+
+        HAL_GPIO_WritePin(SPI_TEST_LED_GPIO_Port,
+                          SPI_TEST_LED_Pin,
+                          GPIO_PIN_RESET);
+    }
+
+    HAL_Delay(1000);
+}
+
