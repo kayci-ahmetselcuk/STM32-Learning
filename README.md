@@ -33,6 +33,7 @@ Each project is developed incrementally and focuses on understanding one embedde
 | 05 | EXTI Interrupt | ✅ |
 | 06 | PWM Servo Motor | ✅ |
 | 07 | OLED Screen | ✅ |
+| 08 | SPI | ✅ |
 
 ---
 
